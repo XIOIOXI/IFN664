@@ -6,6 +6,7 @@
     public bool Add(Member m)
     {
         if (count >= 100) return false;
+        if (Find(m.FirstName, m.LastName) != null) return false;
         members[count++] = m;
         return true;
     }

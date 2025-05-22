@@ -1,58 +1,127 @@
 ﻿public class MovieCollection
 {
-    private Movie[] movies = new Movie[100];
-    private int count = 0;
+    private Movie[] table = new Movie[1000];
+    
+    private int Hash (string title)
+    {
+        int hash = 0;
+        for (int i = 0; i < title.Length; i++)
+        {
+            hash = (hash * 31 + title[i]) % 1000;
+        }
+        return hash;
+    }
 
     public bool Add(Movie movie)
     {
-        if (count >= 100) return false;
+        int index = Hash (movie.Title);
 
-        if (Get(movie.Title) != null)
+        for (int i = 0; i < table.Length; i++)
         {
-            return false; // Duplicate title
+            int probeIndex = (index + i) % table.Length;
+
+            if (table[probeIndex] == null)
+            {
+                table[probeIndex] = movie;
+                return true;
+            }
+            else if (table[probeIndex].Title == movie.Title)
+            {
+                return false;
+            }
         }
 
-        movies[count++] = movie;
-        return true;
+        return false; //table is full
     }
 
     public bool Remove(string title)
     {
-        for (int i = 0; i < count; i++)
+        int index = Hash(title);
+
+        for (int i = 0; i < table.Length; i++)
         {
-            if (movies[i] != null && movies[i].Title == title)
+            int probeIndex = (index + i) % table.Length;
+
+            if (table[probeIndex] == null)
+                return false;
+
+            if (table[probeIndex].Title == title)
             {
-                // Shift movies left
-                for (int j = i; j < count - 1; j++)
-                {
-                    movies[j] = movies[j + 1];
-                }
-                movies[--count] = null;
+                table[probeIndex] = null; // Lazy deletion
                 return true;
             }
         }
+
         return false;
     }
 
     public Movie Get(string title)
     {
-        for (int i = 0; i < count; i++)
+        int index = Hash(title);
+
+        for (int i = 0; i < table.Length; i++)
         {
-            if (movies[i] != null && movies[i].Title == title)
-            {
-                return movies[i];
-            }
+            int probeIndex = (index + i) % table.Length;
+
+            if (table[probeIndex] == null)
+                return null;
+
+            if (table[probeIndex].Title == title)
+                return table[probeIndex];
         }
+
         return null;
     }
 
     public Movie[] GetAllMovies()
     {
-        Movie[] result = new Movie[count];
-        for (int i = 0; i < count; i++)
+        int count = 0;
+        for (int i = 0; i < table.Length; i++)
         {
-            result[i] = movies[i];
+            if (table[i] != null) count++;
         }
+
+        Movie[] result = new Movie[count];
+        int idx = 0;
+
+        for (int i = 0; i < table.Length; i++)
+        {
+            if (table[i] != null)
+            {
+                result[idx++] = table[i];
+            }
+        }
+
         return result;
+    }
+
+
+    // Algorithm GetTopThreeMovies
+    public Movie[] GetTopThreeMovies()
+    {
+        Movie[] all = GetAllMovies();
+        int n = all.Length;
+
+        // Bubble sort by BorrowCount descending
+        for (int i = 0; i < n - 1; i++)
+        {
+            for (int j = 0; j < n - 1 - i; j++)
+            {
+                if (all[j].BorrowCount < all[j + 1].BorrowCount)
+                {
+                    Movie temp = all[j];
+                    all[j] = all[j + 1];
+                    all[j + 1] = temp;
+                }
+            }
+        }
+
+        Movie[] top3 = new Movie[3];
+        for (int i = 0; i < 3 && i < n; i++)
+        {
+            top3[i] = all[i];
+        }
+
+        return top3;
     }
 }

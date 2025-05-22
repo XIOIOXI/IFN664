@@ -5,7 +5,7 @@
     public string Phone;
     public string Password;
 
-    private string[] borrowed = new string[10];
+    private string[] borrowed = new string[5];
     private int borrowCount = 0;
 
     public Member(string first, string last, string phone, string pwd)
@@ -20,7 +20,7 @@
 
     public bool CanBorrow(string title)
     {
-        if (borrowCount >= 10) return false;
+        if (borrowCount >= 5) return false;
         for (int i = 0; i < borrowCount; i++)
         {
             if (borrowed[i] == title) return false;
@@ -30,7 +30,7 @@
 
     public void Borrow(string title)
     {
-        if (borrowCount < 10)
+        if (borrowCount < 5)
         {
             borrowed[borrowCount++] = title;
         }
