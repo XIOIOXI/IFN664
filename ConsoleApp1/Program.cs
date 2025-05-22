@@ -8,7 +8,7 @@ class Program
 
     static void Main(string[] args)
     {
-        SeedTestData();
+        TestData.SeedTestData(movieCollection, memberCollection);
         while (true)
         {
             Console.Clear();
@@ -17,7 +17,7 @@ class Program
             Console.WriteLine("=====================================================");
             Console.WriteLine("Main Menu");
             Console.WriteLine("-----------------------------------------------------");
-            Console.WriteLine("Select from the following: ");
+            Console.Write("Select from the following: ");
             Console.WriteLine("1. Staff");
             Console.WriteLine("2. Member");
             Console.WriteLine("0. End the program");
@@ -43,23 +43,6 @@ class Program
         }
     }
 
-    static void SeedTestData()
-    {
-        movieCollection.Add(new Movie("Inception", "Sci-Fi", "PG", 148, 5));
-        movieCollection.Add(new Movie("Coco", "Family", "G", 105, 3));
-        movieCollection.Add(new Movie("Titanic", "Drama", "PG", 195, 2));
-        movieCollection.Add(new Movie("Avengers", "Action", "M15+", 140, 4));
-        movieCollection.Add(new Movie("The Matrix", "Sci-Fi", "M15+", 136, 6));
-
-        Member m1 = new Member("Alice", "Wang", "0400111222", "1234");
-        Member m2 = new Member("Bob", "Lee", "0411222333", "5678");
-
-        m1.Borrow("Inception");
-        movieCollection.Get("Inception").Borrow();
-
-        memberCollection.Add(m1);
-        memberCollection.Add(m2);
-    }
 
     static void StaffLogin()
     {

@@ -10,6 +10,12 @@
 
     public Movie(string title, string genre, string classification, int duration, int copies)
     {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Movie title cannot be null or empty");
+
+        if (copies < 0)
+            throw new ArgumentException("Number of copies cannot be negative");
+
         Title = title;
         Genre = genre;
         Classification = classification;
