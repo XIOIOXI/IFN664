@@ -95,33 +95,8 @@
         return result;
     }
 
-
-    // Algorithm GetTopThreeMovies
-    public Movie[] GetTopThreeMovies()
+    public Movie[] GetTable()
     {
-        Movie[] all = GetAllMovies();
-        int n = all.Length;
-
-        // Bubble sort by BorrowCount descending
-        for (int i = 0; i < n - 1; i++)
-        {
-            for (int j = 0; j < n - 1 - i; j++)
-            {
-                if (all[j].BorrowCount < all[j + 1].BorrowCount)
-                {
-                    Movie temp = all[j];
-                    all[j] = all[j + 1];
-                    all[j + 1] = temp;
-                }
-            }
-        }
-
-        Movie[] top3 = new Movie[3];
-        for (int i = 0; i < 3 && i < n; i++)
-        {
-            top3[i] = all[i];
-        }
-
-        return top3;
+        return table;
     }
 }
